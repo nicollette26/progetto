@@ -31,29 +31,6 @@ Il database relazionale è composto da tre tabelle collegate tramite chiavi este
 2. **`ESAME_EMOCROMO`**: Registra i valori di laboratorio (`ID_Esame`, `ID_Paziente`, `RBC`, `HGB`, `HCT`, `WBC`, `PLT`, `MCV`, `MCH`, `MCHC`).
 3. **`REFERTO_ANALISI`**: Memorizza l'esito diagnostico (`ID_Referto`, `ID_Esame`, `Esito_Diagnostico`, `Indice_Anomalia_Perc`).
 
----
-
-## Come eseguire il Progetto
-
-### Requisiti Software
-* **MATLAB** (versione R2020b o successiva)
-* **MATLAB Database Toolbox** (supporto nativo `sqlite`)
-* **VS Code** (opzionale, consigliato con estensione `vscode-sqlite` per la gestione del repository)
-
-### Istruzioni per l'Avvio
-
-
-### Background Scientifico e Riferimenti
-Tramite i link forniti mi sono documentata sull'alterazione dei parametri dell'emocromo in relazione alla rilevanza delle infezioni virali, ritrovando un articolo sullo studio e l'analisi dell'emocromo completo durante l'infezione da Covid-19 in cui i pazienti venivano classificati in lievi, moderati, gravi e diversi parametri ematologici sono stati descritti come associati all'infezione da Covid-19 e alla sua gravità.
-
-> "Reconstitution of lymphocytes may be an important factor for recovery (33). Low lymphocyte count might be used by clinicians in risk stratification to             predict severe and fatal COVID-19 in hospitalized patient"
-* **Sito consultato PubMed**: "Complete blood count alterations in COVID-19 patients" -> https://pmc.ncbi.nlm.nih.gov/articles/PMC8495616/
-
-
-Inoltre l'algoritmo di diagnosi dell'emocromo si inserisce nel contesto della ricerca ematologica moderna, dove lo studio dell'invecchiamento del midollo osseo e della senescenza cellulare spiega l'insorgenza di patologie come l'anemia e le alterazioni emopoietiche. 
-Sempre tramite un altro link fornito, ho approfondito un bioprogetto riguardante l'eliminazione farmacologica delle cellule senescenti che attenua l'invecchiamento del midollo osseo. Lo studio evidenzia come la compromissione delle cellule staminali ematopoietiche (HSC) e del microambiente midollare aumenti la predisposizione ad anemia e infezioni, i cui parametri chiave (HGB, RBC, WBC) vengono analizzati e monitorati dal software 'EmocromoAnalyzer'.
-* **Sito consultato NCBI**: "Nucleolar dysfunction-mediated leakage of DNA-RNA hybrids primes the innate immune response and is implicated in the inflammation underlying Diamond-Blackfan Anemia" -> https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE316278
-
 * ## 🗄️ Schema del Database (Diagramma ER)
 
 ```mermaid
@@ -89,3 +66,27 @@ erDiagram
         REAL Indice_Anomalia_Perc
         TEXT Data_Referto
     }
+---
+
+## Come eseguire il Progetto
+
+### Requisiti Software
+* **MATLAB** (versione R2020b o successiva)
+* **MATLAB Database Toolbox** (supporto nativo `sqlite`)
+* **VS Code** (opzionale, consigliato con estensione `vscode-sqlite` per la gestione del repository)
+
+### Istruzioni per l'Avvio
+
+
+### Background Scientifico e Riferimenti
+Tramite i link forniti mi sono documentata sull'alterazione dei parametri dell'emocromo in relazione alla rilevanza delle infezioni virali, ritrovando un articolo sullo studio e l'analisi dell'emocromo completo durante l'infezione da Covid-19 in cui i pazienti venivano classificati in lievi, moderati, gravi e diversi parametri ematologici sono stati descritti come associati all'infezione da Covid-19 e alla sua gravità.
+
+> "Reconstitution of lymphocytes may be an important factor for recovery (33). Low lymphocyte count might be used by clinicians in risk stratification to             predict severe and fatal COVID-19 in hospitalized patient"
+* **Sito consultato PubMed**: "Complete blood count alterations in COVID-19 patients" -> https://pmc.ncbi.nlm.nih.gov/articles/PMC8495616/
+
+
+Inoltre l'algoritmo di diagnosi dell'emocromo si inserisce nel contesto della ricerca ematologica moderna, dove lo studio dell'invecchiamento del midollo osseo e della senescenza cellulare spiega l'insorgenza di patologie come l'anemia e le alterazioni emopoietiche. 
+Sempre tramite un altro link fornito, ho approfondito un bioprogetto riguardante l'eliminazione farmacologica delle cellule senescenti che attenua l'invecchiamento del midollo osseo. Lo studio evidenzia come la compromissione delle cellule staminali ematopoietiche (HSC) e del microambiente midollare aumenti la predisposizione ad anemia e infezioni, i cui parametri chiave (HGB, RBC, WBC) vengono analizzati e monitorati dal software 'EmocromoAnalyzer'.
+* **Sito consultato NCBI**: "Nucleolar dysfunction-mediated leakage of DNA-RNA hybrids primes the innate immune response and is implicated in the inflammation underlying Diamond-Blackfan Anemia" -> https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE316278
+
+
