@@ -25,21 +25,24 @@ disp('Database pulito. Inizio inserimento dei dati...'); %[output:3a693eda]
 
 % 4. Ciclaggio su ogni riga del dataset
 for i = 1:height(dataset)
+
     eta = dataset.Age(i);
-    
-    % Calcolo data di nascita approssimativa dall'età per evitare valori NULL
-    annoNascita = 2026 - eta;
+
+    % meglio usare l'anno corrente
+    annoCorrente = year(datetime('now'));
+    annoNascita = annoCorrente - eta;
     dataNascita = sprintf('%d-01-01', annoNascita);
-    
-    % Gestione genere ('Male'/'Female' convertiti in 'M'/'F')
-    sessoRaw = string(dataset.Gender{i});
-    if sessoRaw == "Male"
+
+    % gestione robusta del sesso
+    sessoRaw = lower(string(dataset.Gender{i}));
+    if strcmp(sessoRaw, "male")
         sesso = 'M';
-    else
+    elseif strcmp(sessoRaw, "female")
         sesso = 'F';
+    else
+        sesso = 'F';  % default sicuro
     end
-    
-    % Valori dell'emocromo
+
     hgb = dataset.Hemoglobin(i);
     rbc = dataset.Red_Blood_Cells(i);
     wbc = dataset.White_Blood_Cells(i);
@@ -47,14 +50,12 @@ for i = 1:height(dataset)
     mcv = dataset.MCV(i);
     mch = dataset.MCH(i);
     mchc = dataset.MCHC(i);
-    
-    % Calcolo HCT approssimato
+
     hct = rbc * 3.1;
-    
-    % Logica diagnostica
+
     esito = "Valori nella Norma";
     anomaliaPerc = 0.0;
-    
+
     if (sesso == 'F' && hgb < 12.0) || (sesso == 'M' && hgb < 13.5)
         if mcv < 80
             esito = "Anemia Microcitica";
@@ -69,21 +70,24 @@ for i = 1:height(dataset)
         esito = "Piastrinopenia";
         anomaliaPerc = 20.0;
     end
-    
-    % Inserimento Paziente (inclusa la Data_Nascita)
+
     codicePaziente = sprintf('PAZ_%03d', i);
     sqlPaz = sprintf("INSERT INTO PAZIENTE (Codice, Data_Nascita, Sesso) VALUES ('%s', '%s', '%s');", ...
         codicePaziente, dataNascita, sesso);
     exec(conn, sqlPaz);
-    
-    % Inserimento Esame
+
+    idPaziente = fetch(conn, "SELECT last_insert_rowid();");
+    idPaziente = idPaziente{1};
+
     sqlEsame = sprintf("INSERT INTO ESAME_EMOCROMO (ID_Paziente, RBC, HGB, HCT, WBC, PLT, MCV, MCH, MCHC) VALUES (%d, %.2f, %.2f, %.2f, %.0f, %.0f, %.2f, %.2f, %.2f);", ...
-        i, rbc, hgb, hct, wbc, plt, mcv, mch, mchc);
+        idPaziente, rbc, hgb, hct, wbc, plt, mcv, mch, mchc);
     exec(conn, sqlEsame);
-    
-    % Inserimento Referto
+
+    idEsame = fetch(conn, "SELECT last_insert_rowid();");
+    idEsame = idEsame{1};
+
     sqlRef = sprintf("INSERT INTO REFERTO_ANALISI (ID_Esame, Esito_Diagnostico, Indice_Anomalia_Perc) VALUES (%d, '%s', %.1f);", ...
-        i, esito, anomaliaPerc);
+        idEsame, esito, anomaliaPerc);
     exec(conn, sqlRef);
 end
 
