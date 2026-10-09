@@ -102,25 +102,9 @@ end
 
 close(conn);
 
-disp('----------------------------------------------------'); %[output:4268f338]
-disp(' Database popolato correttamente senza valori NULL! '); %[output:9241fbdf]
-disp('----------------------------------------------------'); %[output:0f636ce8]
+disp('----------------------------------------------------'); 
+disp(' Database popolato correttamente senza valori NULL! '); 
+disp('----------------------------------------------------');
 
-%[appendix]{"version":"1.0"}
-%---
-%[metadata:view]
-%   data: {"layout":"onright"}
-%---
-%[output:3a693eda]
-%   data: {"dataType":"text","outputData":{"text":"Database pulito. Inizio inserimento dei dati...\n","truncated":false}}
-%---
-%[output:4268f338]
-%   data: {"dataType":"text","outputData":{"text":"----------------------------------------------------\n","truncated":false}}
-%---
-%[output:9241fbdf]
-%   data: {"dataType":"text","outputData":{"text":" Database popolato correttamente senza valori NULL! \n","truncated":false}}
-%---
-%[output:0f636ce8]
-%   data: {"dataType":"text","outputData":{"text":"----------------------------------------------------\n","truncated":false}}
-%---
+
 
