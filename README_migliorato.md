@@ -1,6 +1,6 @@
 # EmocromoAnalyzer - Gestione & Analisi Emocromo
 
-**EmocromoAnalyzer** è un'applicazione desktop sviluppata in MATLAB App Designer integrata con un database relazionale SQLite. L'obiettivo del progetto è automatizzare l'analisi dei parametri ematologici (emocromo) e fornire diagnosi rapide basate su algoritmi clinici consolidati.
+**EmocromoAnalyzer** è un'applicazione desktop sviluppata in MATLAB App Designer integrata con un database relazionale SQLite. L'obiettivo del progetto è automatizzare l'analisi dei parametri ematologici (emocromo) e fornire diagnosi automatica di anomalie.
 
 ---
 
@@ -403,6 +403,14 @@ L'emocromo (Esame Emocromocitometrico Completo) è uno dei test diagnostici più
 2. **Monitoring** di pazienti in terapia (chemioterapia, immunoterapia)
 3. **Risk stratification** in pazienti critici
 
+### Dataset: Kaggle
+
+Per reperire i dati necessari allo sviluppo del progetto, ho consultato il sito **Kaggle** (https://www.kaggle.com/datasets), una delle piattaforme più importanti per la raccolta di dataset pubblici. Su Kaggle ho trovato e selezionato il dataset specifico utilizzato in questo progetto, che contiene dati ematologici reali e strutturati per l'analisi di parametri di emocromo.
+
+**Fonte dataset:** https://www.kaggle.com/datasets
+
+---
+
 ### Riferimento 1: COVID-19 e Alterazioni Ematologiche
 
 Uno studio pubblicato su **PubMed Central** ha analizzato come il COVID-19 provoca alterazioni significative dell'emocromo, in particolare:
@@ -436,4 +444,3 @@ Uno studio recente del **National Center for Biotechnology Information (NCBI)** 
 
 - **Progetto:** Elaborato Biomedico
 - **Linguaggio:** MATLAB (App Designer + SQLite)
----
