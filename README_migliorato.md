@@ -437,9 +437,3 @@ Uno studio recente del **National Center for Biotechnology Information (NCBI)** 
 - **Progetto:** Elaborato Biomedico
 - **Linguaggio:** MATLAB (App Designer + SQLite)
 ---
-
-Per problemi o domande:
-1. Consulta la sezione [Troubleshooting](#troubleshooting)
-2. Verifica che tutti i file siano presenti nella cartella progetto
-3. Assicurati che MATLAB e il Database Toolbox siano correttamente installati
-
