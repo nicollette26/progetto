@@ -4,7 +4,7 @@
 
 ---
 
-## 📋 Indice
+## Indice
 
 1. [Funzionalità Principali](#funzionalità-principali)
 2. [Requisiti e Setup](#requisiti-e-setup)
@@ -18,7 +18,7 @@
 
 ---
 
-## ✨ Funzionalità Principali
+## Funzionalità Principali
 
 - **Input Parametri Clinici**: Inserimento e validazione di parametri ematologici (Sesso, HGB, RBC, WBC, PLT, MCV, MCH, MCHC)
 - **Diagnosi Automatica**: Rilevamento in tempo reale di anomalie (Anemia Microcitica/Normocitica, Piastrinopenia, Anomalia Leucocitaria)
@@ -29,7 +29,7 @@
 
 ---
 
-## 🔧 Requisiti e Setup
+## Requisiti e Setup
 
 ### Software Necessario
 
@@ -57,13 +57,13 @@ Assicurati di avere questi file nella cartella del progetto:
 
 ---
 
-## 🚀 Guida di Avvio
+## Guida di Avvio
 
 ### Procedura Standard
 
 Apri MATLAB nella cartella del progetto e segui questi passaggi in ordine:
 
-#### 1️⃣ **Crea il Database**
+#### 1️. **Crea il Database**
 
 Digita nel Command Window di MATLAB:
 
@@ -80,7 +80,7 @@ crea_database
 
 Se vedi un errore, vai alla sezione [Troubleshooting](#troubleshooting).
 
-#### 2️⃣ **Popola il Database dal CSV**
+#### 2️. **Popola il Database dal CSV**
 
 Digita:
 
@@ -96,10 +96,10 @@ Database pulito. Inizio inserimento dei dati...
 ----------------------------------------------------
 ```
 
-> ⚠️ **Importante**: Il file `blood_count_dataset.csv` deve trovarsi nella stessa cartella di `popola_database.m`. Controlla che le colonne del CSV siano esattamente:
+> **Importante**: Il file `blood_count_dataset.csv` deve trovarsi nella stessa cartella di `popola_database.m`. Controlla che le colonne del CSV siano esattamente:
 > - `Age`, `Gender`, `Hemoglobin`, `Red_Blood_Cells`, `White_Blood_Cells`, `Platelet_Count`, `MCV`, `MCH`, `MCHC`
 
-#### 3️⃣ **Avvia l'Applicazione**
+#### 3️. **Avvia l'Applicazione**
 
 Digita:
 
@@ -111,7 +111,7 @@ L'app si apre in MATLAB App Designer. Clicca il pulsante **▶ Run** (in alto) p
 
 ---
 
-## 🗄️ Architettura del Database
+## Architettura del Database
 
 Il database SQLite (`emocromo.db`) è composto da **3 tabelle relazionali**:
 
@@ -180,7 +180,7 @@ erDiagram
 
 ---
 
-## 📁 Struttura del Progetto
+## Struttura del Progetto
 
 ```
 progetto/
@@ -204,7 +204,7 @@ progetto/
 
 ---
 
-## 🩸 Descrizione Clinica dei Parametri
+## Descrizione Clinica dei Parametri
 
 ### Globuli Rossi e Trasporto di Ossigeno
 
@@ -259,7 +259,7 @@ progetto/
 
 ---
 
-## 🔍 Algoritmi Diagnostici
+## Algoritmi Diagnostici
 
 L'app implementa logica diagnostica basata su soglie cliniche consolidate:
 
@@ -315,7 +315,7 @@ SE nessuna condizione sopra ALLORA
 
 ---
 
-## 🛠️ Troubleshooting
+## Troubleshooting
 
 ### Errore 1: "File blood_count_dataset.csv non trovato"
 
@@ -393,7 +393,7 @@ appdesigner EmocromoAnalyzer.mlapp
 
 ---
 
-## 📚 Background Scientifico
+## Background Scientifico
 
 ### Contesto Clinico
 
@@ -432,22 +432,11 @@ Uno studio recente del **National Center for Biotechnology Information (NCBI)** 
 
 ---
 
-## 👨‍💻 Autore e Note di Sviluppo
+## Autore e Note di Sviluppo
 
 - **Progetto:** Elaborato Biomedico
 - **Linguaggio:** MATLAB (App Designer + SQLite)
-- **Versione:** 1.0
-- **Ultimo Aggiornamento:** Ottobre 2026
-
 ---
-
-## 📄 Licenza
-
-Questo progetto è fornito per scopi educativi e didattici.
-
----
-
-## 📞 Supporto
 
 Per problemi o domande:
 1. Consulta la sezione [Troubleshooting](#troubleshooting)
