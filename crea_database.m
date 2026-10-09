@@ -64,9 +64,3 @@ catch ME
         close(conn);
     end
 end
-
-%[appendix]{"version":"1.0"}
-%---
-%[metadata:view]
-%   data: {"layout":"onright","rightPanelPercent":45.5}
-%---
