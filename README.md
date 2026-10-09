@@ -53,3 +53,39 @@ Tramite i link forniti mi sono documentata sull'alterazione dei parametri dell'e
 Inoltre l'algoritmo di diagnosi dell'emocromo si inserisce nel contesto della ricerca ematologica moderna, dove lo studio dell'invecchiamento del midollo osseo e della senescenza cellulare spiega l'insorgenza di patologie come l'anemia e le alterazioni emopoietiche. 
 Sempre tramite un altro link fornito, ho approfondito un bioprogetto riguardante l'eliminazione farmacologica delle cellule senescenti che attenua l'invecchiamento del midollo osseo. Lo studio evidenzia come la compromissione delle cellule staminali ematopoietiche (HSC) e del microambiente midollare aumenti la predisposizione ad anemia e infezioni, i cui parametri chiave (HGB, RBC, WBC) vengono analizzati e monitorati dal software 'EmocromoAnalyzer'.
 * **Sito consultato NCBI**: "Nucleolar dysfunction-mediated leakage of DNA-RNA hybrids primes the innate immune response and is implicated in the inflammation underlying Diamond-Blackfan Anemia" -> https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE316278
+
+* ## 🗄️ Schema del Database (Diagramma ER)
+
+```mermaid
+erDiagram
+    PAZIENTE ||--o{ ESAME_EMOCROMO : "effettua"
+    ESAME_EMOCROMO ||--|| REFERTO_ANALISI : "genera"
+
+    PAZIENTE {
+        INTEGER ID_Paziente PK
+        TEXT Codice
+        TEXT Data_Nascita
+        TEXT Sesso
+    }
+
+    ESAME_EMOCROMO {
+        INTEGER ID_Esame PK
+        INTEGER ID_Paziente FK
+        TEXT Data_Esame
+        REAL RBC
+        REAL HGB
+        REAL HCT
+        REAL WBC
+        REAL PLT
+        REAL MCV
+        REAL MCH
+        REAL MCHC
+    }
+
+    REFERTO_ANALISI {
+        INTEGER ID_Referto PK
+        INTEGER ID_Esame FK
+        TEXT Esito_Diagnostico
+        REAL Indice_Anomalia_Perc
+        TEXT Data_Referto
+    }
