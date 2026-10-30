@@ -21,7 +21,7 @@ exec(conn, 'DELETE FROM sqlite_sequence WHERE name="PAZIENTE";');
 exec(conn, 'DELETE FROM sqlite_sequence WHERE name="ESAME_EMOCROMO";');
 exec(conn, 'DELETE FROM sqlite_sequence WHERE name="REFERTO_ANALISI";');
 
-disp('Database pulito. Inizio inserimento dei dati...'); %[output:3a693eda]
+disp('Database pulito. Inizio inserimento dei dati...');
 
 % 4. Ciclaggio su ogni riga del dataset
 for i = 1:height(dataset)
@@ -56,24 +56,8 @@ for i = 1:height(dataset)
     % Calcolo HCT approssimato
     hct = rbc * 3.1;
     
-    % Logica diagnostica
-    esito = "Valori nella Norma";
-    anomaliaPerc = 0.0;
-    
-    if (sesso == 'F' && hgb < 12.0) || (sesso == 'M' && hgb < 13.5)
-        if mcv < 80
-            esito = "Anemia Microcitica";
-        else
-            esito = "Anemia Normocitica";
-        end
-        anomaliaPerc = 25.0;
-    elseif wbc > 11000 || wbc < 4000
-        esito = "Anomalia Globuli Bianchi";
-        anomaliaPerc = 30.0;
-    elseif plt < 150000
-        esito = "Piastrinopenia";
-        anomaliaPerc = 20.0;
-    end
+    % Richiamo alla funzione unica
+    [esito, anomaliaPerc, ~] = diagnostica_emocromo(sesso, hgb, wbc, plt, mcv, mch, mchc);
     
     % Inserimento Paziente (inclusa la Data_Nascita)
     codicePaziente = sprintf('PAZ_%03d', i);
@@ -104,7 +88,4 @@ close(conn);
 
 disp('----------------------------------------------------'); 
 disp(' Database popolato correttamente senza valori NULL! '); 
-disp('----------------------------------------------------');
-
-
-
+disp('----------------------------------------------------'); 
