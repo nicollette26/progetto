@@ -1,50 +1,45 @@
 % Script per popolare il Database emocromo.db dal file CSV
-
-% 1. Verifica esistenza del file CSV
 nomeFile = 'blood_count_dataset.csv';
 if ~exist(nomeFile, 'file')
     error('File %s non trovato! Controlla di averlo messo nella cartella progetto.', nomeFile);
 end
 
 dataset = readtable(nomeFile);
+dataset = unique(dataset, 'rows');
 
-% 2. Connessione al database SQLite
 conn = sqlite('emocromo.db');
 
-% 3. Pulizia tabelle esistenti
 exec(conn, 'DELETE FROM REFERTO_ANALISI;');
 exec(conn, 'DELETE FROM ESAME_EMOCROMO;');
 exec(conn, 'DELETE FROM PAZIENTE;');
 
-% Reset dei contatori autoincrement
 exec(conn, 'DELETE FROM sqlite_sequence WHERE name="PAZIENTE";');
 exec(conn, 'DELETE FROM sqlite_sequence WHERE name="ESAME_EMOCROMO";');
 exec(conn, 'DELETE FROM sqlite_sequence WHERE name="REFERTO_ANALISI";');
 
 disp('Database pulito. Inizio inserimento dei dati...');
 
-% 4. Ciclaggio su ogni riga del dataset
 for i = 1:height(dataset)
-    % CORREZIONE: Accedi correttamente ai dati con (i, 'NomeColonna')
+
+    % Eta
     eta = dataset{i, 'Age'};
-    
-    % Calcolo data di nascita approssimativa dall'età per evitare valori NULL
-    % CORREZIONE: Usa l'anno corrente invece di 2026
+
+    % Data di nascita approssimativa dall'eta
     annoCorrente = year(datetime('now'));
     annoNascita = annoCorrente - eta;
     dataNascita = sprintf('%d-01-01', annoNascita);
-    
-    % Gestione genere ('Male'/'Female' convertiti in 'M'/'F')
+
+    % Sesso
     sessoRaw = lower(string(dataset{i, 'Gender'}));
     if sessoRaw == "male"
         sesso = 'M';
     elseif sessoRaw == "female"
         sesso = 'F';
     else
-        sesso = 'F'; % default
+        sesso = 'F'; % default prudente
     end
-    
-    % Valori dell'emocromo - CORREZIONE: Usa accesso sicuro
+
+    % Valori dell'emocromo
     hgb = dataset{i, 'Hemoglobin'};
     rbc = dataset{i, 'Red_Blood_Cells'};
     wbc = dataset{i, 'White_Blood_Cells'};
@@ -52,33 +47,25 @@ for i = 1:height(dataset)
     mcv = dataset{i, 'MCV'};
     mch = dataset{i, 'MCH'};
     mchc = dataset{i, 'MCHC'};
-    
-    % Calcolo HCT approssimato
-    hct = rbc * 3.1;
-    
-    % Richiamo alla funzione unica
-    [esito, anomaliaPerc, ~] = diagnostica_emocromo(sesso, hgb, wbc, plt, mcv, mch, mchc);
-    
-    % Inserimento Paziente (inclusa la Data_Nascita)
+    hct = rbc * mcv / 10;
+
+    [esito, anomaliaPerc, dettagli] = diagnostica_emocromo(sesso, hgb, wbc, plt, mcv, mch, mchc);
+
     codicePaziente = sprintf('PAZ_%03d', i);
     sqlPaz = sprintf("INSERT INTO PAZIENTE (Codice, Data_Nascita, Sesso) VALUES ('%s', '%s', '%s');", ...
         codicePaziente, dataNascita, sesso);
     exec(conn, sqlPaz);
     
-    % CORREZIONE: Recupera l'ID reale del paziente appena inserito
     resultPaziente = fetch(conn, "SELECT last_insert_rowid();");
-    idPaziente = resultPaziente{1, 1}; % Estrai il valore dalla cell
-    
-    % Inserimento Esame - CORREZIONE: Usa idPaziente, non i
+    idPaziente = resultPaziente{1, 1};
+
     sqlEsame = sprintf("INSERT INTO ESAME_EMOCROMO (ID_Paziente, RBC, HGB, HCT, WBC, PLT, MCV, MCH, MCHC) VALUES (%d, %.2f, %.2f, %.2f, %.0f, %.0f, %.2f, %.2f, %.2f);", ...
         idPaziente, rbc, hgb, hct, wbc, plt, mcv, mch, mchc);
     exec(conn, sqlEsame);
-    
-    % CORREZIONE: Recupera l'ID reale dell'esame appena inserito
+
     resultEsame = fetch(conn, "SELECT last_insert_rowid();");
-    idEsame = resultEsame{1, 1}; % Estrai il valore dalla cell
-    
-    % Inserimento Referto - CORREZIONE: Usa idEsame, non i
+    idEsame = resultEsame{1, 1};
+
     sqlRef = sprintf("INSERT INTO REFERTO_ANALISI (ID_Esame, Esito_Diagnostico, Indice_Anomalia_Perc) VALUES (%d, '%s', %.1f);", ...
         idEsame, esito, anomaliaPerc);
     exec(conn, sqlRef);
@@ -86,6 +73,6 @@ end
 
 close(conn);
 
-disp('----------------------------------------------------'); 
-disp(' Database popolato correttamente senza valori NULL! '); 
-disp('----------------------------------------------------'); 
+disp('----------------------------------------------------');
+disp(' Database popolato correttamente! ');
+disp('----------------------------------------------------');
