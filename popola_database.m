@@ -1,11 +1,24 @@
 % Script per popolare il Database emocromo.db dal file CSV
-nomeFile = 'blood_count_dataset.csv';
+nomeFile = 'blood_count_dataset_clean.csv';
+
 if ~exist(nomeFile, 'file')
-    error('File %s non trovato! Controlla di averlo messo nella cartella progetto.', nomeFile);
+    if exist('blood_count_dataset.csv', 'file')
+        nomeFile = 'blood_count_dataset.csv';
+    else
+        error('File %s non trovato! Controlla di averlo messo nella cartella progetto.', nomeFile);
+    end
 end
 
-dataset = readtable(nomeFile);
-dataset = unique(dataset, 'rows');
+if exist('prepara_dataset.m', 'file')
+    dataset = prepara_dataset(nomeFile);
+else
+    dataset = readtable(nomeFile);
+    dataset = unique(dataset, 'rows');
+end
+
+if strcmp(nomeFile, 'blood_count_dataset.csv')
+    dataset = unique(dataset, 'rows');
+end
 
 conn = sqlite('emocromo.db');
 
@@ -20,26 +33,24 @@ exec(conn, 'DELETE FROM sqlite_sequence WHERE name="REFERTO_ANALISI";');
 disp('Database pulito. Inizio inserimento dei dati...');
 
 for i = 1:height(dataset)
-
-    % Eta
     eta = dataset{i, 'Age'};
+    if isempty(eta) || isnan(eta)
+        continue;
+    end
 
-    % Data di nascita approssimativa dall'eta
     annoCorrente = year(datetime('now'));
     annoNascita = annoCorrente - eta;
     dataNascita = sprintf('%d-01-01', annoNascita);
 
-    % Sesso
     sessoRaw = lower(string(dataset{i, 'Gender'}));
     if sessoRaw == "male"
         sesso = 'M';
     elseif sessoRaw == "female"
         sesso = 'F';
     else
-        sesso = 'F'; % default prudente
+        sesso = 'F'; 
     end
 
-    % Valori dell'emocromo
     hgb = dataset{i, 'Hemoglobin'};
     rbc = dataset{i, 'Red_Blood_Cells'};
     wbc = dataset{i, 'White_Blood_Cells'};
@@ -47,6 +58,13 @@ for i = 1:height(dataset)
     mcv = dataset{i, 'MCV'};
     mch = dataset{i, 'MCH'};
     mchc = dataset{i, 'MCHC'};
+
+    [ok, msg] = valida_emocromo(sesso, hgb, rbc, wbc, plt, mcv, mch, mchc);
+    if ~ok
+        warning('Riga %d scartata: %s', i, msg);
+        continue;
+    end
+
     hct = rbc * mcv / 10;
 
     [esito, anomaliaPerc, dettagli] = diagnostica_emocromo(sesso, hgb, wbc, plt, mcv, mch, mchc);
@@ -55,7 +73,7 @@ for i = 1:height(dataset)
     sqlPaz = sprintf("INSERT INTO PAZIENTE (Codice, Data_Nascita, Sesso) VALUES ('%s', '%s', '%s');", ...
         codicePaziente, dataNascita, sesso);
     exec(conn, sqlPaz);
-    
+
     resultPaziente = fetch(conn, "SELECT last_insert_rowid();");
     idPaziente = resultPaziente{1, 1};
 
