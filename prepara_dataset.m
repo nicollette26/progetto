@@ -62,10 +62,6 @@ function dataset = prepara_dataset(nomeFile)
             warning('Dataset troppo poco vario in PLT: considerare un dataset più realistico.');
         end
     end
-
-    cleanFile = 'blood_count_dataset_clean.csv';
-    writetable(dataset, cleanFile);
-    fprintf('Dataset pulito salvato in %s\n', cleanFile);
 end
 
 %[appendix]{"version":"1.0"}
