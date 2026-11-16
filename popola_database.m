@@ -1,24 +1,11 @@
-% Script per popolare il Database emocromo.db dal file CSV
-nomeFile = 'blood_count_dataset_clean.csv';
+projectDir = fileparts(mfilename('fullpath'));
+nomeFile = fullfile(projectDir, 'blood_count_dataset_clean.csv');
 
-if ~exist(nomeFile, 'file')
-    if exist('blood_count_dataset.csv', 'file')
-        nomeFile = 'blood_count_dataset.csv';
-    else
-        error('File %s non trovato! Controlla di averlo messo nella cartella progetto.', nomeFile);
-    end
+if ~isfile(nomeFile)
+    error('Dataset non trovato: %s', nomeFile);
 end
 
-if exist('prepara_dataset.m', 'file')
-    dataset = prepara_dataset(nomeFile);
-else
-    dataset = readtable(nomeFile);
-    dataset = unique(dataset, 'rows');
-end
-
-if strcmp(nomeFile, 'blood_count_dataset.csv')
-    dataset = unique(dataset, 'rows');
-end
+dataset = prepara_dataset(nomeFile);
 
 conn = sqlite('emocromo.db');
 
