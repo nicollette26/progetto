@@ -1,10 +1,15 @@
 function dataset = prepara_dataset(nomeFile)
+    projectDir = fileparts(mfilename('fullpath'));
+
     if nargin < 1 || isempty(nomeFile)
-        nomeFile = 'blood_count_dataset.csv';
+        nomeFile = fullfile(projectDir, 'blood_count_dataset_clean.csv');
+    elseif ~isfile(nomeFile)
+       
+        nomeFile = fullfile(projectDir, nomeFile);
     end
 
-    if ~exist(nomeFile, 'file')
-        error('File %s non trovato nella cartella corrente.', nomeFile);
+    if ~isfile(nomeFile)
+        error('Dataset non trovato: %s', nomeFile);
     end
 
     dataset = readtable(nomeFile);
