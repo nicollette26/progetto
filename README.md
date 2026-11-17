@@ -221,7 +221,7 @@ progetto/
 **HCT (Ematocrito)** [%]
 - Percentuale di sangue occupata da globuli rossi
 - Valori normali: Donne 36-46% | Uomini 41-53%
-- Calcolato automaticamente: HCT = RBC × 3.1
+- Calcolato automaticamente: HCT = RBC × MCV / 10
 
 ### Globuli Bianchi (Sistema Immunitario)
 
