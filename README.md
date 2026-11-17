@@ -193,7 +193,8 @@ progetto/
 ├── crea_database.m                      # Script creazione schema DB
 ├── popola_database.m                    # Script popolo DB da CSV
 ├── EmocromoAnalyzer.mlapp               # App Designer (interfaccia grafica)
-├── blood_count_dataset_clean.csv        # Dataset con dati pazienti
+├── prepara_dataset.m                    # Script verifica struttura e valori del dataset
+├── blood_count_dataset_clean.csv        # Dataset con dati pazienti già pulito e deduplicato usato dal progetto
 └── emocromo.db                          # Database SQLite (creato in runtime)
 ```
 
@@ -204,7 +205,8 @@ progetto/
 | `crea_database.m` | MATLAB Script | Crea tabelle SQLite con indici |
 | `popola_database.m` | MATLAB Script | Legge CSV e inserisce dati nel DB |
 | `EmocromoAnalyzer.mlapp` | App Designer | Interfaccia grafica + logica applicativa |
-| `blood_count_dataset.csv` | Dataset | Dati paziente con parametri ematologici |
+| `prepara_dataset.m` | MATLAB Script | Script verifica struttura e valori del dataset |
+| `blood_count_dataset_clean.csv` | Dataset | Dati paziente con parametri ematologici, pulito e deduplicato |
 | `emocromo.db` | SQLite Database | Database relazionale (generato automaticamente) |
 
 ---
@@ -358,7 +360,7 @@ cd /percorso/corretto/  % cambia cartella
 ls   % elenca i file (su Linux/Mac) o dir (su Windows)
 ```
 
-Assicurati che `blood_count_dataset.csv` sia visibile.
+Assicurati che `blood_count_dataset_clean.csv` sia visibile.
 
 ---
 
