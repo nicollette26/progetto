@@ -52,7 +52,8 @@ Assicurati di avere questi file nella cartella del progetto:
 
 - `crea_database.m` - Script per creare lo schema SQLite
 - `popola_database.m` - Script per popolare il DB dal CSV
-- `blood_count_dataset.csv` - Dataset con i dati dei pazienti
+- `blood_count_dataset_clean.csv` - Dataset con i dati dei pazienti già pulito e deduplicato usato dal progetto
+- `prepara_dataset.m` - Verifica struttura e valori del dataset
 - `EmocromoAnalyzer.mlapp` - Applicazione App Designer
 
 ---
@@ -60,6 +61,10 @@ Assicurati di avere questi file nella cartella del progetto:
 ## Guida di Avvio
 
 ### Procedura Standard
+
+**NOTA AGGIUNTIVA:**
+Il programma usa esclusivamente `blood_count_dataset_clean.csv`.
+`prepara_dataset.m` controlla colonne, valori numerici finiti e duplicati, ma non modifica il file CSV.
 
 Apri MATLAB nella cartella del progetto e segui questi passaggi in ordine:
 
@@ -96,7 +101,7 @@ Database pulito. Inizio inserimento dei dati...
 ----------------------------------------------------
 ```
 
-> **Importante**: Il file `blood_count_dataset.csv` deve trovarsi nella stessa cartella di `popola_database.m`. Controlla che le colonne del CSV siano esattamente:
+> **Importante**: Il file `blood_count_dataset_clean.csv` deve trovarsi nella stessa cartella di `popola_database.m`. Controlla che le colonne del CSV siano esattamente:
 > - `Age`, `Gender`, `Hemoglobin`, `Red_Blood_Cells`, `White_Blood_Cells`, `Platelet_Count`, `MCV`, `MCH`, `MCHC`
 
 #### 3️. **Avvia l'Applicazione**
@@ -184,12 +189,12 @@ erDiagram
 
 ```
 progetto/
-├── README.md                      # Questo file
-├── crea_database.m                # Script creazione schema DB
-├── popola_database.m              # Script popolo DB da CSV
-├── EmocromoAnalyzer.mlapp         # App Designer (interfaccia grafica)
-├── blood_count_dataset.csv        # Dataset con dati pazienti
-└── emocromo.db                    # Database SQLite (creato in runtime)
+├── README.md                            # Questo file
+├── crea_database.m                      # Script creazione schema DB
+├── popola_database.m                    # Script popolo DB da CSV
+├── EmocromoAnalyzer.mlapp               # App Designer (interfaccia grafica)
+├── blood_count_dataset_clean.csv        # Dataset con dati pazienti
+└── emocromo.db                          # Database SQLite (creato in runtime)
 ```
 
 ### File Descrizione
@@ -270,9 +275,15 @@ SE (Sesso == 'F' AND HGB < 12.0) OR (Sesso == 'M' AND HGB < 13.5) ALLORA
     SE MCV < 80 ALLORA
         Esito = "Anemia Microcitica"
         Indice_Anomalia = 25%
+    ALTRIMENTI SE MCV > 100 ALLORA
+        Esito = "Anemia Macrocitica"
+        Indice_Anomalia = 25%
     ALTRIMENTI
         Esito = "Anemia Normocitica"
         Indice_Anomalia = 25%
+
+    SE MCH < 27 OR MCHC < 32 ALLORA
+        Esito = Esito + " / Ipocromica"
 ```
 
 **Cause comuni:**
@@ -305,15 +316,33 @@ SE PLT < 150,000 ALLORA
 - Produzione ridotta (aplasia midollare)
 - Malattie autoimmuni
 
-### 4. **Valori nella Norma**
+### 4. **Gestione delle anomalie multiple**
+
+```
+Il sistema può riportare più anomalie nello stesso esito. Sono controllate:
+
+- Anemia: microcitica, normocitica o macrocitica
+- Anomalia dei globuli bianchi
+- Piastrinopenia
+
+Un esempio di esito combinato è:
+
+```text
+Anemia Microcitica / Ipocromica + Anomalia Globuli Bianchi + Piastrinopenia
+```
+
+### 5. **Valori nella Norma**
 
 ```
 SE nessuna condizione sopra ALLORA
     Esito = "Valori nella Norma"
     Indice_Anomalia = 0%
-```
 
----
+```markdown
+L’indice percentuale rappresenta il massimo tra i valori delle anomalie rilevate,
+non la somma. Nell’implementazione attuale: anemia 25%, piastrinopenia 20%
+e anomalia dei globuli bianchi 30%; quindi un esito combinato può avere indice 30%.
+```
 
 ## Troubleshooting
 
@@ -406,35 +435,6 @@ L'emocromo (Esame Emocromocitometrico Completo) è uno dei test diagnostici più
 ### Dataset: Kaggle
 
 Per reperire i dati necessari allo sviluppo del progetto, ho consultato il sito **Kaggle** (https://www.kaggle.com/datasets), una delle piattaforme più importanti per la raccolta di dataset pubblici. In particolare qui ho trovato il dataset utilizzato per il progetto, selezionando un insieme di dati ematologici strutturati e pertinenti all'analisi dell'emocromo
-
----
-
-### Riferimento 1: COVID-19 e Alterazioni Ematologiche
-
-Uno studio pubblicato su **PubMed Central** ha analizzato come il COVID-19 provoca alterazioni significative dell'emocromo, in particolare:
-
-- **Linfopenia** (basso numero di linfociti) correlata con decorso grave
-- **Leucocitosi** (aumento leucociti) come marker di gravità
-- **Trombocitopenia** associata a outcome peggiori
-
-**Citazione:**
-> "Low lymphocyte count might be used by clinicians in risk stratification to predict severe and fatal COVID-19 outcomes"
-
-**Fonte:** 
-- "Complete blood count alterations in COVID-19 patients" 
-- https://pmc.ncbi.nlm.nih.gov/articles/PMC8495616/
-
-### Riferimento 2: Senescenza Cellulare e Ematopoiesi
-
-Uno studio recente del **National Center for Biotechnology Information (NCBI)** ha dimostrato che:
-
-- L'eliminazione farmacologica delle **cellule senescenti** attenua l'invecchiamento del midollo osseo
-- La disfunzione nucleolare causa alterazioni nei parametri ematologici
-- La risposta immunitaria innata è compromessa in condizioni di senescenza
-
-**Fonte:**
-- "Nucleolar dysfunction-mediated leakage of DNA-RNA hybrids primes the innate immune response..."
-- https://www.ncbi.nlm.nih.gov/
 
 ---
 
