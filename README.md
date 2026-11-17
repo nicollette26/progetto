@@ -205,7 +205,7 @@ progetto/
 | `crea_database.m` | MATLAB Script | Crea tabelle SQLite con indici |
 | `popola_database.m` | MATLAB Script | Legge CSV e inserisce dati nel DB |
 | `EmocromoAnalyzer.mlapp` | App Designer | Interfaccia grafica + logica applicativa |
-| `prepara_dataset.m` | MATLAB Script | Script verifica struttura e valori del dataset |
+| `prepara_dataset.m` | MATLAB Script | Verifica struttura e valori del dataset |
 | `blood_count_dataset_clean.csv` | Dataset | Dati paziente con parametri ematologici, pulito e deduplicato |
 | `emocromo.db` | SQLite Database | Database relazionale (generato automaticamente) |
 
