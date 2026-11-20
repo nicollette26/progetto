@@ -437,7 +437,7 @@ L'emocromo (Esame Emocromocitometrico Completo) è uno dei test diagnostici più
 ### Dataset: Kaggle
 
 Per reperire i dati necessari allo sviluppo del progetto, ho consultato il sito **Kaggle**, una delle piattaforme più importanti per la raccolta di dataset pubblici. In particolare qui ho trovato il dataset utilizzato per il progetto, selezionando un insieme di dati ematologici strutturati e pertinenti all'analisi dell'emocromo
-> [!DATASET]
+
 > Consulta per vedere la fonte del dataset: **https://www.kaggle.com/datasets/vizeno/complete-blood-count-cbc-dataset**
 
 
