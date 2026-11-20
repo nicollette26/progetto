@@ -63,6 +63,3 @@ function dataset = prepara_dataset(nomeFile)
         end
     end
 end
-
-%[appendix]{"version":"1.0"}
-%---
