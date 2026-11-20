@@ -2,12 +2,17 @@ projectDir = fileparts(mfilename('fullpath'));
 nomeFile = fullfile(projectDir, 'blood_count_dataset_clean.csv');
 
 if ~isfile(nomeFile)
+    projectDir = pwd;   
+    nomeFile = fullfile(projectDir, 'blood_count_dataset_clean.csv');
+end
+
+if ~isfile(nomeFile)
     error('Dataset non trovato: %s', nomeFile);
 end
 
 dataset = prepara_dataset(nomeFile);
 
-conn = sqlite('emocromo.db');
+conn = sqlite(fullfile(projectDir, 'emocromo.db'));
 
 exec(conn, 'DELETE FROM REFERTO_ANALISI;');
 exec(conn, 'DELETE FROM ESAME_EMOCROMO;');
