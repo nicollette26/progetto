@@ -450,8 +450,8 @@ Per reperire i dati necessari allo sviluppo del progetto, ho consultato il sito 
 
 ---
 
-> [!IMPORTANTE]
-> **Avvertenza — uso didattico:** Questo progetto è stato realizzato esclusivamente a scopo didattico e dimostrativo. Le soglie e le regole implementate sono semplificate e non sono state validate per l’uso clinico. I risultati non costituiscono un referto medico, una diagnosi o un’indicazione terapeutica
+> [!IMPORTANT]
+>  **Avvertenza — uso didattico:** Questo progetto è stato realizzato esclusivamente a scopo didattico e dimostrativo. Le soglie e le regole implementate sono semplificate e non sono state validate per l’uso clinico. I risultati non costituiscono un referto medico, una diagnosi o un’indicazione terapeutica
 
 ## Autore e Note di Sviluppo
 
