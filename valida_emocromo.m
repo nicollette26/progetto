@@ -71,6 +71,3 @@ function [ok, messaggio] = valida_emocromo(sesso, hgb, rbc, wbc, plt, mcv, mch, 
         return;
     end
 end
-
-%[appendix]{"version":"1.0"}
-%---
