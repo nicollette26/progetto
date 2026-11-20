@@ -79,5 +79,5 @@ end
 close(conn);
 
 disp('----------------------------------------------------');
-disp(' Database popolato correttamente! ');
+disp(' Database popolato correttamente senza valori NULL! ');
 disp('----------------------------------------------------');
