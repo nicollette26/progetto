@@ -52,8 +52,10 @@ Assicurati di avere questi file nella cartella del progetto:
 
 - `crea_database.m` - Script per creare lo schema SQLite
 - `popola_database.m` - Script per popolare il DB dal CSV
-- `blood_count_dataset_clean.csv` - Dataset con i dati dei pazienti già pulito e deduplicato usato dal progetto
 - `prepara_dataset.m` - Verifica struttura e valori del dataset
+- `diagnostica_emocromo.m` - Calcola la diagnosi ed è usata dall'app e dallo script di popolamento
+- `valida_emocromo.m` - Valida i parametri prima del popolamento del database
+- `blood_count_dataset_clean.csv` - Dataset con i dati dei pazienti già pulito e deduplicato usato dal progetto
 - `EmocromoAnalyzer.mlapp` - Applicazione App Designer
 
 ---
@@ -192,11 +194,14 @@ progetto/
 ├── README.md                            # Questo file
 ├── crea_database.m                      # Script creazione schema DB
 ├── popola_database.m                    # Script popolo DB da CSV
-├── EmocromoAnalyzer.mlapp               # App Designer (interfaccia grafica)
 ├── prepara_dataset.m                    # Script verifica struttura e valori del dataset
+├── diagnostica_emocromo.m               # Funzione diagnostica usata dall'app e dal popolamento
+├── valida_emocromo.m                    # Funzione di validazione usata dal popolamento
+├── EmocromoAnalyzer.mlapp               # App Designer (interfaccia grafica)
 ├── blood_count_dataset_clean.csv        # Dataset con dati pazienti già pulito e deduplicato usato dal progetto
 └── emocromo.db                          # Database SQLite (creato in runtime)
 ```
+**NOTA AGGIUNTIVA**: l’app e gli script devono poter trovare queste funzioni, quindi i file devono rimanere nella cartella del progetto o comunque essere nel MATLAB path
 
 ### File Descrizione
 
@@ -204,8 +209,10 @@ progetto/
 |------|------|-------|
 | `crea_database.m` | MATLAB Script | Crea tabelle SQLite con indici |
 | `popola_database.m` | MATLAB Script | Legge CSV e inserisce dati nel DB |
-| `EmocromoAnalyzer.mlapp` | App Designer | Interfaccia grafica + logica applicativa |
 | `prepara_dataset.m` | MATLAB Script | Verifica struttura e valori del dataset |
+| `diagnostica_emocromo.m` | Funzione MATLAB | Analizza HGB, WBC, PLT, MCV, MCH E MCHC; restituisce esito e indice di anomalia
+| `valida_emocromo.m` | Funzione MATLAB | Controlla i parametri prima dell'inserimento dei dati dal CSV
+| `EmocromoAnalyzer.mlapp` | App Designer | Interfaccia grafica + logica applicativa |
 | `blood_count_dataset_clean.csv` | Dataset | Dati paziente con parametri ematologici, pulito e deduplicato |
 | `emocromo.db` | SQLite Database | Database relazionale (generato automaticamente) |
 
@@ -232,7 +239,7 @@ progetto/
 
 ### Globuli Bianchi (Sistema Immunitario)
 
-**WBC (Globuli Bianchi / Leucociti)** [10³/μL]
+**WBC (Globuli Bianchi / Leucociti)** [cellule/μL]
 - Numero totale di cellule immunitarie nel sangue
 - Difendono da infezioni (batteriche, virali, fungine)
 - Valori normali: 4,000 - 11,000 leucociti/μL
@@ -240,7 +247,7 @@ progetto/
 
 ### Piastrine (Coagulazione)
 
-**PLT (Piastrine / Trombociti)** [10³/μL]
+**PLT (Piastrine / Trombociti)** [cellule/μL]
 - Cellule fondamentali per la coagulazione del sangue
 - Riparano vasi sanguigni in caso di ferite
 - Valori normali: 150,000 - 400,000 piastrine/μL
@@ -348,7 +355,7 @@ e anomalia dei globuli bianchi 30%; quindi un esito combinato può avere indice 
 
 ## Troubleshooting
 
-### Errore 1: "File blood_count_dataset.csv non trovato"
+### Errore 1: "File blood_count_dataset_clean.csv non trovato"
 
 **Causa:** Il CSV non è nella stessa cartella di `popola_database.m`
 
@@ -442,6 +449,9 @@ Per reperire i dati necessari allo sviluppo del progetto, ho consultato il sito 
 
 
 ---
+
+> [!IMPORTANTE]
+> **Avvertenza — uso didattico:** Questo progetto è stato realizzato esclusivamente a scopo didattico e dimostrativo. Le soglie e le regole implementate sono semplificate e non sono state validate per l’uso clinico. I risultati non costituiscono un referto medico, una diagnosi o un’indicazione terapeutica
 
 ## Autore e Note di Sviluppo
 
