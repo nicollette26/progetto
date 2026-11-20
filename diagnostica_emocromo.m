@@ -7,7 +7,7 @@ function [esito, anomaliaPerc, dettagli] = diagnostica_emocromo(sesso, hgb, wbc,
 
     esito = "Valori nella Norma";
     anomaliaPerc = 0;
-    dettagli = struct('tipoAnemia', 'Nessuna', 'anomalie', {});
+    dettagli = struct('tipoAnemia', 'Nessuna', 'anomalie', {{}});
 
     anomalie = {};
 
