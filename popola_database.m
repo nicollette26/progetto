@@ -12,7 +12,13 @@ end
 
 dataset = prepara_dataset(nomeFile);
 
-conn = sqlite(fullfile(projectDir, 'emocromo.db'));
+dbPath = fullfile(prefdir, 'emocromo.db');
+
+if ~isfile(dbPath)
+    crea_database(dbPath);
+end
+
+conn = sqlite(dbPath);
 
 exec(conn, 'DELETE FROM REFERTO_ANALISI;');
 exec(conn, 'DELETE FROM ESAME_EMOCROMO;');
