@@ -1,7 +1,23 @@
 % Script per la creazione del Database SQLite 'emocromo.db'
+function crea_database(dbPath)
+
+    if nargin < 1 || isempty(dbPath)
+        dbPath = fullfile(prefdir, 'emocromo.db');
+    end
+
+    [dbFolder, ~, ~] = fileparts(dbPath);
+    if ~isempty(dbFolder) && ~isfolder(dbFolder)
+        mkdir(dbFolder);
+    end
+
+    conn = [];
 
 try
-    conn = sqlite('emocromo.db', 'connect');
+    if isfile(dbPath)
+        conn = sqlite(dbPath);
+    else
+        conn = sqlite(dbPath, "create");
+    end
 
     exec(conn, 'PRAGMA foreign_keys = ON;');
 
@@ -52,12 +68,18 @@ try
     disp('----------------------------------------------------');
 
 catch ME
+    if ~isempty(conn)
+            try
+                close(conn);
+            catch
+                % La connessione potrebbe non essere stata aperta
+            end
+    end
     disp('----------------------------------------------------');
     disp('ERRORE nella creazione del database:');
     disp(ME.message);
     disp('----------------------------------------------------');
 
-    if exist('conn', 'var') && ~isempty(conn) && isa(conn, 'sqlite')
-        close(conn);
-    end
+    rethrow(ME);
+end
 end
