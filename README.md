@@ -57,6 +57,7 @@ Assicurati di avere questi file nella cartella del progetto:
 - `valida_emocromo.m` - Valida i parametri prima del popolamento del database
 - `blood_count_dataset_clean.csv` - Dataset con i dati dei pazienti già pulito e deduplicato usato dal progetto
 - `EmocromoAnalyzer.mlapp` - Applicazione App Designer
+- `cartella: foto interfaccia grafica` - Foto che appaiono nell'interfaccia grafica 
 
 ---
 
