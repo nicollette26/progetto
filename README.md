@@ -66,8 +66,8 @@ Assicurati di avere questi file nella cartella del progetto:
 ### Procedura Standard
 
 **NOTA AGGIUNTIVA:**
-Il programma usa esclusivamente `blood_count_dataset_clean.csv`.
-`prepara_dataset.m` controlla colonne, valori numerici finiti e duplicati, ma non modifica il file CSV.
+- Il programma usa esclusivamente `blood_count_dataset_clean.csv`. `prepara_dataset.m` controlla colonne, valori numerici finiti e duplicati, ma non modifica il file CSV.
+- I file MATLAB, inclusi gli script e i file App Designer, devono essere salvati tutti all'interno della stessa cartella, inoltre estrarre le immagini all'interno della cartella "foto interfaccia grafica" per averle come file singoli nella cartella del progetto
 
 Apri MATLAB nella cartella del progetto e segui questi passaggi in ordine:
 
