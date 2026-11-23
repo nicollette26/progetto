@@ -39,7 +39,9 @@
 | Database Toolbox | - | Supporto nativo `sqlite` |
 | VS Code | - | Opzionale (per gestire il repo e il CSV) |
 
-### Step 1: Clona il Repository
+### Step 1: Preparazione
+
+Clona o scarica il repository e apri in MATLAB la cartella che contiene gli script:
 
 ```bash
 git clone https://github.com/nicollette26/progetto.git
@@ -51,8 +53,8 @@ cd progetto
 Assicurati di avere questi file nella cartella del progetto:
 
 - `crea_database.m` - Script per creare lo schema SQLite
-- `popola_database.m` - Script per popolare il DB dal CSV
 - `prepara_dataset.m` - Verifica struttura e valori del dataset
+- `popola_database.m` - Script per popolare il DB dal CSV
 - `diagnostica_emocromo.m` - Calcola la diagnosi ed è usata dall'app e dallo script di popolamento
 - `valida_emocromo.m` - Valida i parametri prima del popolamento del database
 - `blood_count_dataset_clean.csv` - Dataset con i dati dei pazienti già pulito e deduplicato usato dal progetto
@@ -66,7 +68,7 @@ Assicurati di avere questi file nella cartella del progetto:
 ### Procedura Standard
 
 **NOTE AGGIUNTIVE:**
-- Il programma usa esclusivamente `blood_count_dataset_clean.csv`. `prepara_dataset.m` controlla colonne, valori numerici finiti e duplicati, ma non modifica il file CSV.
+- Il programma usa esclusivamente `blood_count_dataset_clean.csv`
 - I file MATLAB, inclusi gli script e i file App Designer, devono essere salvati tutti all'interno della stessa cartella, inoltre estrarre le immagini all'interno della cartella "foto interfaccia grafica" per averle come file singoli nella cartella del progetto
 
 Apri MATLAB nella cartella del progetto e segui questi passaggi in ordine:
@@ -87,6 +89,15 @@ crea_database
 ```
 
 Se vedi un errore, vai alla sezione [Troubleshooting](#troubleshooting).
+
+#### 2️. **Verifica del CSV**
+
+Per controllare il CSV senza modificarlo:
+
+```matlab
+prepara_dataset
+```
+`prepara_dataset.m` controlla le colonne richieste, rimuove duplicati e filtra righe non valide in memoria; non modifica il file CSV.
 
 #### 2️. **Popola il Database dal CSV**
 
@@ -194,23 +205,27 @@ erDiagram
 progetto/
 ├── README.md                            # Questo file
 ├── crea_database.m                      # Script creazione schema DB
-├── popola_database.m                    # Script popolo DB da CSV
 ├── prepara_dataset.m                    # Script verifica struttura e valori del dataset
+├── popola_database.m                    # Script popolo DB da CSV
 ├── diagnostica_emocromo.m               # Funzione diagnostica usata dall'app e dal popolamento
 ├── valida_emocromo.m                    # Funzione di validazione usata dal popolamento
 ├── EmocromoAnalyzer.mlapp               # App Designer (interfaccia grafica)
 ├── blood_count_dataset_clean.csv        # Dataset con dati pazienti già pulito e deduplicato usato dal progetto
-└── emocromo.db                          # Database SQLite (creato in runtime)
+├── emocromo.db                          # Database SQLite (creato in runtime)
+└── foto interfaccia grafica             # Immagini dell'interfaccia, se utilizzate
 ```
-**NOTA AGGIUNTIVA**: l’app e gli script devono poter trovare queste funzioni, quindi i file devono rimanere nella cartella del progetto o comunque essere nel MATLAB path
+**File generati durante l'esecuzione**
+Il database emocromo.db non è incluso nel repository: crea_database() e popola_database() lo creano in prefdir di MATLAB. Per sapere dove si trova sul tuo computer, esegui:
+`prefdir`
+Gli script e il file .mlapp devono essere nella cartella del progetto o comunque nel MATLAB path. È consigliato mantenere il CSV accanto a popola_database.m.
 
 ### File Descrizione
 
 | File | Tipo | Scopo |
 |------|------|-------|
 | `crea_database.m` | MATLAB Script | Crea tabelle SQLite con indici |
-| `popola_database.m` | MATLAB Script | Legge CSV e inserisce dati nel DB |
 | `prepara_dataset.m` | MATLAB Script | Verifica struttura e valori del dataset |
+| `popola_database.m` | MATLAB Script | Legge CSV e inserisce dati nel DB |
 | `diagnostica_emocromo.m` | Funzione MATLAB | Analizza HGB, WBC, PLT, MCV, MCH E MCHC; restituisce esito e indice di anomalia
 | `valida_emocromo.m` | Funzione MATLAB | Controlla i parametri prima dell'inserimento dei dati dal CSV
 | `EmocromoAnalyzer.mlapp` | App Designer | Interfaccia grafica + logica applicativa |
