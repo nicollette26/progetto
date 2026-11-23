@@ -139,6 +139,7 @@ Il database SQLite (`emocromo.db`) è composto da **3 tabelle relazionali**:
 ID_Paziente (PK, AUTOINCREMENT)
 ├─ Codice (VARCHAR, UNIQUE) - Identificativo univoco (es. PAZ_001)
 ├─ Data_Nascita (DATE) - Anno di nascita approssimativo
+> **Nota sull'età e sulla data di nascita:** il campo `Data_Nascita` non contiene la vera data di nascita del paziente. Lo script `popola_database.m` legge `Age` dal CSV e calcola approssimativamente l'anno come `anno corrente - età`, usando il 1° gennaio come data convenzionale
 └─ Sesso (CHAR, CHECK IN ('M', 'F'))
 ```
 
