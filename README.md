@@ -373,79 +373,192 @@ e anomalia dei globuli bianchi 30%; quindi un esito combinato può avere indice 
 
 ### Errore 1: "File blood_count_dataset_clean.csv non trovato"
 
-**Causa:** Il CSV non è nella stessa cartella di `popola_database.m`
+**Causa:** Il CSV non è stato trovato nello script o nella cartella corrente.
 
 **Soluzione:**
+
 ```matlab
-% In MATLAB, verifica la cartella corrente
-pwd  % stampa il percorso attuale
-cd /percorso/corretto/  % cambia cartella
-ls   % elenca i file (su Linux/Mac) o dir (su Windows)
+% Verifica la cartella corrente
+pwd
+
+% Vai nella cartella del progetto
+cd('percorso/completo/della/cartella/progetto')
+
+% Verifica che il file sia presente
+isfile('blood_count_dataset_clean.csv')
 ```
 
-Assicurati che `blood_count_dataset_clean.csv` sia visibile.
+Se `isfile` restituisce `0`, inserisci il CSV nella stessa cartella di `popola_database.m` oppure passa esplicitamente il percorso corretto:
 
----
+```matlab
+dataset = prepara_dataset('percorso/completo/blood_count_dataset_clean.csv');
+```
 
 ### Errore 2: "Subscripting into a table using one subscript ... is not supported"
 
-**Causa:** Accesso scorretto alle colonne di una table MATLAB
+**Causa:** Non si sta utilizzando la sintassi MATLAB corretta per accedere a una cella di una table.
 
-**Soluzione:** Questo errore è stato già corretto in `popola_database.m`. Se persiste:
+**Soluzione:**
+
 ```matlab
-% Sbagliato ❌
+% Sbagliato
 eta = dataset.Age(i);
 
-% Corretto ✅
+% Corretto
 eta = dataset{i, 'Age'};
+hgb = dataset{i, 'Hemoglobin'};
 ```
 
----
+Se l'errore persiste, verifica che `dataset` sia una table:
+
+```matlab
+whos dataset
+```
+
+Dovrebbe risultare `table`, non un array o una matrice.
 
 ### Errore 3: "FOREIGN KEY constraint failed"
 
-**Causa:** L'ID_Paziente o ID_Esame non esiste nella tabella padre
+**Causa:** È stata tentata l'inserimento di un esame o di un referto riferendosi a un paziente o a un esame inesistente.
 
-**Soluzione:** Esegui di nuovo i comandi in ordine:
+**Soluzione:** In MATLAB chiudi le connessioni SQLite aperte e ricrea il database:
+
 ```matlab
 clear all
-crea_database
-popola_database
+close all
+
+dbPath = fullfile(prefdir, 'emocromo.db');
+
+if isfile(dbPath)
+    delete(dbPath);
+end
+
+crea_database(dbPath);
+popola_database;
 ```
 
-Se persiste, elimina il file `emocromo.db` e ricrea da zero.
+`emocromo.db` non si trova necessariamente nella cartella del progetto: viene creato nella cartella delle preferenze MATLAB restituita da:
 
----
+```matlab
+prefdir
+```
 
 ### Errore 4: "Database is locked"
 
-**Causa:** Un'altra connessione SQLite ha il DB aperto
+**Causa:** Il database è aperto da un'altra connessione MATLAB, da App Designer o da un programma esterno, come l'estensione SQLite di VS Code.
 
 **Soluzione:**
+
+1. Chiudi l'app di App Designer premendo il pulsante di chiusura.
+2. Chiudi le connessioni SQLite aperte.
+3. Chiudi eventuali browser o estensioni SQLite.
+4. Esegui:
+
 ```matlab
-clear all  % Chiude tutte le connessioni
+clear all
 close all
 ```
 
-Se usi VS Code con estensione SQLite, chiudi eventuali query aperte.
+Se il problema persiste, chiudi MATLAB, riavvialo e esegui nuovamente:
 
----
-
-### Errore 5: App Designer non si apre
-
-**Causa:** MATLAB non ha trovato il file `.mlapp`
-
-**Soluzione:**
 ```matlab
-% Verifica il percorso
-which EmocromoAnalyzer.mlapp
-
-% Se non lo trova, cambia directory
-cd /percorso/progetto
-appdesigner EmocromoAnalyzer.mlapp
+crea_database;
+popola_database;
 ```
 
----
+### Errore 5: App Designer non si apre o non trova il file `.mlapp`
+
+**Causa:** MATLAB non trova `EmocromoAnalyzer.mlapp` perché si trova in un'altra cartella o il MATLAB path non è configurato.
+
+**Soluzione:**
+
+```matlab
+cd('percorso/completo/della/cartella/progetto');
+which EmocromoAnalyzer.mlapp
+appdesigner('EmocromoAnalyzer.mlapp');
+```
+
+Se `which` non restituisce il percorso del file, il comando `cd` non sta indicando la cartella corretta.
+
+In alternativa, aggiungi il progetto al MATLAB path:
+
+```matlab
+addpath(pwd);
+savepath;
+```
+
+### Errore 6: Database o dati non visualizzati nell'app
+
+**Causa:** L'app cerca un database diverso da quello popolato oppure i dati non sono stati inseriti.
+
+**Soluzione:**
+
+1. Verifica il percorso effettivo del database:
+
+```matlab
+dbPath = fullfile(prefdir, 'emocromo.db');
+disp(dbPath);
+isfile(dbPath)
+```
+
+2. Ricrea e popola il database:
+
+```matlab
+crea_database(dbPath);
+popola_database;
+```
+
+3. Verifica che il database contenga i dati:
+
+```matlab
+conn = sqlite(fullfile(prefdir, 'emocromo.db'), 'readonly');
+data = fetch(conn, 'SELECT COUNT(*) AS Numero FROM PAZIENTE');
+close(conn);
+disp(data)
+```
+
+4. Riavvia l'app:
+
+```matlab
+appdesigner('EmocromoAnalyzer.mlapp');
+```
+
+Assicurati inoltre che il codice dell'app apra proprio:
+
+```matlab
+fullfile(prefdir, 'emocromo.db')
+```
+
+La tabella contenente i dati principali dei pazienti è `PAZIENTE`.
+
+### Errore 7: Nessun dato inserito o tutte le righe scartate
+
+**Causa:** Alcune righe del CSV vengono escluse perché contengono valori mancanti, non numerici, infiniti o negativi; altre vengono scartate dalla funzione `valida_emocromo`.
+
+**Soluzione:**
+
+```matlab
+dataset = prepara_dataset('blood_count_dataset_clean.csv');
+disp(height(dataset));
+```
+
+Riprova il popolamento:
+
+```matlab
+popola_database;
+```
+
+Controlla che il CSV contenga esattamente queste colonne:
+
+- `Age`
+- `Gender`
+- `Hemoglobin`
+- `Red_Blood_Cells`
+- `White_Blood_Cells`
+- `Platelet_Count`
+- `MCV`
+- `MCH`
+- `MCHC`
 
 ## Background Scientifico
 
